@@ -1,0 +1,50 @@
+*** CS5004 Homework09 Wan-Ting Yun ***
+README file explaining the design of Homework09 and reasons for changing some design in Homework08.
+
+# Design of Views : The view presents the model's data to the user.
+
+  IView interface: It contains a method that displays the view.
+
+  GraphicalView, Button, DrawSnapshots class: They works together to present the graphical view
+  using Java Swing. DrawSnapshots extending JPanel, and its paintComponent method is override so
+  that it could paint the rectangle and oval as expected. Once drawShapes method gets called, it
+  will paint the shapes on the panel. Button helps set up the menu buttons on the canvas.
+  GraphicalView displays the view window as a Graphical User Interface(GUI) application.
+
+  WebView class: It draws the shapes using SVG, and displays the view window as HTML.
+
+# Design of Controllers: The controller exists between the view and the model. It listens to events
+  of the view and calls methods in the model.
+
+  PhotoAlbumBuilder interface and PhotoAlbumBuilderImp class: The helper function that calls the
+  methods in the ShapePhotoAlbum model.
+
+  FileParser class : The helper function that parses the input file and matches the lines with the
+  commands. After matching, it asks the PhotoAlbumBuilder object to return a copy of the model
+  which contains the result after executing the instructions.
+
+  IViewController interface: It contains a method that gets the controller started.
+
+  GraphicalViewController class (interactive): It implements IViewController and ActionListener
+  interface. It passes and updates the data to the graphical view, and when an action is detected
+  from the view, it will execute the appropriate reaction to these events.
+
+  GraphicalViewController class (static): It implements IViewController and passes the data from
+  the model to the view. It also generated an output html file by calling the save method in the
+  WebView class.
+
+# Reasons for several changes made in the model package
+
+  1. Remove the ColorType enum: Both of the views supports displaying color by passing in three RGB
+     values, so the self-defined color is unnecessary.
+
+  2. Create a new Snapshot class: As I tried to test the graphical view, I found that my original
+     design failed to run properly when the shapes were modified. Though the buildings.txt worked
+     fine, the demo_input.txt only presented the final status of the shapes. I believed that is
+     because of the shallow copy of the shape list, hence I thought maybe creating a new class and
+     generating a deep copy of the shape list when a snapshot was took could solve the problem.
+     Another reason is that storing all the information in the Snapshot class made it easier for
+     the view and the controller to extract data.
+
+  3. The order of the parameters: I refactored the order of the parameters of the methods in the
+     model for better matching up with the file commands.
